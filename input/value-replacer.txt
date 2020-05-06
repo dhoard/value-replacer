@@ -1,0 +1,55 @@
+file /etc/kafka/zookeeper.properties
+
+oldValue dataDir=/tmp/zookeeper
+newValue dataDir=/var/lib/zookeeper
+
+file /etc/kafka/server.properties
+
+oldValue log.dirs=/tmp/kafka-logs
+newValue log.dirs=/var/lib/kafka
+
+oldValue #metric.reporters=io.confluent.metrics.reporter.ConfluentMetricsReporter
+newValue metric.reporters=io.confluent.metrics.reporter.ConfluentMetricsReporter
+
+oldValue #confluent.metrics.reporter.bootstrap.servers=localhost:9092
+newValue confluent.metrics.reporter.bootstrap.servers=localhost:9092
+
+oldValue #confluent.metrics.reporter.topic.replicas=1
+newValue confluent.metrics.reporter.topic.replicas=1
+
+file /etc/ksqldb/ksql-production-server.properties
+
+oldValue ksql.internal.topic.replicas=3
+newValue ksql.internal.topic.replicas=1
+
+oldValue ksql.internal.topic.min.insync.replicas=2
+newValue ksql.internal.topic.min.insync.replicas=1
+
+oldValue ksql.streams.replication.factor=3
+newValue ksql.streams.replication.factor=1
+
+oldValue ksql.streams.topic.min.insync.replicas=2
+newValue ksql.streams.topic.min.insync.replicas=1
+
+oldValue ksql.streams.state.dir=/some/non-temporary-storage-path/
+newValue ksql.streams.state.dir=/var/lib/ksql
+
+file /etc/confluent-control-center/control-center-production.properties
+
+oldValue #confluent.controlcenter.ksql.ksqlDB.url=http://ksql:8088
+newValue confluent.controlcenter.ksql.ksqlDB.url=http://localhost:8088
+
+oldValue #confluent.controlcenter.schema.registry.url=http://schema-registry:8081
+newValue confluent.controlcenter.schema.registry.url=http://localhost:8081
+
+oldValue #confluent.controlcenter.internal.topics.replication=3
+newValue confluent.controlcenter.internal.topics.replication=1
+
+oldValue #confluent.controlcenter.command.topic.replication=3
+newValue confluent.controlcenter.command.topic.replication=1
+
+oldValue #confluent.monitoring.interceptor.topic.replication=3
+newValue confluent.monitoring.interceptor.topic.replication=1
+
+oldValue #confluent.metrics.topic.replication=3
+newValue confluent.metrics.topic.replication=1
