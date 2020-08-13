@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 public class ValueReplacer {
 
+    public static final String INFO = "INFO";
+
     public static void main(String[] args) throws IOException {
         new ValueReplacer().run(args);
     }
@@ -46,10 +48,10 @@ public class ValueReplacer {
                 templateFile = new File(outputFile.getAbsolutePath() + ".TEMPLATE");
 
                 if (!templateFile.exists()) {
-                    System.out.println("Creating template file ...");
+                    log(INFO, "Creating template file [" + templateFile.getAbsolutePath() + "]");
                     Files.copy(outputFile.toPath(), templateFile.toPath());
                 } else {
-                    System.out.println("Found existing template file ...");
+                    log(INFO,"Found existing template file [" + templateFile.getAbsolutePath() + "]");
                 }
 
                 contents = load(templateFile);
@@ -68,9 +70,8 @@ public class ValueReplacer {
                     throw new RuntimeException("file has not been loaded!");
                 }
 
-                System.out.println("Replacing ...");
-                System.out.println("  oldValue = [" + oldValue + "]");
-                System.out.println("  newValue = [" + newValue + "]");
+                log(INFO, "O [" + oldValue + "]");
+                log(INFO, "N [" + newValue + "]");
 
                 contents = contents.replaceAll(Pattern.quote(oldValue), newValue);
                 oldValue = null;
@@ -84,12 +85,12 @@ public class ValueReplacer {
     }
 
     private static String load(File file) throws IOException  {
-        System.out.println("Loading file [" + file.getAbsolutePath() + "]");
+        log(INFO,"Loading file [" + file.getAbsolutePath() + "]");
         return new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
     }
 
     private static void save(File file, String contents) throws IOException {
-        System.out.println("Saving file [" + file.getAbsolutePath() + "]");
+        log(INFO,"Saving file [" + file.getAbsolutePath() + "]");
         BufferedWriter bufferedWriter = null;
 
         try {
@@ -106,5 +107,9 @@ public class ValueReplacer {
                 }
             }
         }
+    }
+
+    private static void log(String label, String message) {
+        System.out.println("[" + label + "] " + message);
     }
 }
