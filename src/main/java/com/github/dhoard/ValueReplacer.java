@@ -24,6 +24,7 @@ public class ValueReplacer {
         String contents = null;
         String oldValue = null;
         String newValue = null;
+        String appendValue = null;
 
         File instructionFile = new File(args[0]);
         BufferedReader bufferedReader = new BufferedReader(new FileReader(instructionFile));
@@ -63,6 +64,22 @@ public class ValueReplacer {
 
             if (line.startsWith("newValue ")) {
                 newValue =  line.substring(line.indexOf("newValue ") + "newValue ".length());
+            }
+
+            if (line.startsWith("appendValue ")) {
+                appendValue =  line.substring(line.indexOf("appendValue ") + "appendValue ".length());
+
+                if (null == contents) {
+                    throw new RuntimeException("file has not been loaded!");
+                }
+
+                log(INFO, "A [" + appendValue + "]");
+
+                contents = contents + System.getProperty("line.separator");
+                contents = contents + appendValue;
+
+                oldValue = null;
+                newValue = null;
             }
 
             if ((null != newValue) && (null != oldValue)) {
