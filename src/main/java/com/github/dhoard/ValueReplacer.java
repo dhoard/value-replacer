@@ -27,6 +27,8 @@ public class ValueReplacer {
         String appendValue = null;
 
         File instructionFile = new File(args[0]);
+        String hostname = args[1];
+
         BufferedReader bufferedReader = new BufferedReader(new FileReader(instructionFile));
 
         while (true) {
@@ -42,7 +44,7 @@ public class ValueReplacer {
 
             if (line.startsWith("file ")) {
                 if (null != outputFile) {
-                    save(outputFile, contents);
+                    save(outputFile, contents, hostname);
                 }
 
                 outputFile = new File(line.substring(line.indexOf("file ") + "file ".length()));
@@ -97,7 +99,7 @@ public class ValueReplacer {
         }
 
         if (null != contents) {
-            save(outputFile, contents);
+            save(outputFile, contents, hostname);
         }
     }
 
@@ -106,7 +108,9 @@ public class ValueReplacer {
         return new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
     }
 
-    private static void save(File file, String contents) throws IOException {
+    private static void save(File file, String contents, String hostname) throws IOException {
+        contents = contents.replaceAll(Pattern.quote("{{ hostname }}"), hostname);
+
         log(INFO,"Saving file [" + file.getAbsolutePath() + "]");
         BufferedWriter bufferedWriter = null;
 
