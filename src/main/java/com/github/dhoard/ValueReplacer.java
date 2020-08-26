@@ -50,11 +50,14 @@ public class ValueReplacer {
                 outputFile = new File(line.substring(line.indexOf("file ") + "file ".length()));
                 templateFile = new File(outputFile.getAbsolutePath() + ".TEMPLATE");
 
+                log(INFO, "F [" + outputFile + "]");
+                log(INFO, "T [" + templateFile + "]");
+
                 if (!templateFile.exists()) {
-                    log(INFO, "Creating template file [" + templateFile.getAbsolutePath() + "]");
+                    //log(INFO, "Creating template file [" + templateFile.getAbsolutePath() + "]");
                     Files.copy(outputFile.toPath(), templateFile.toPath());
                 } else {
-                    log(INFO,"Found existing template file [" + templateFile.getAbsolutePath() + "]");
+                    //log(INFO,"Found existing template file [" + templateFile.getAbsolutePath() + "]");
                 }
 
                 contents = load(templateFile);
@@ -75,6 +78,8 @@ public class ValueReplacer {
                     throw new RuntimeException("file has not been loaded!");
                 }
 
+                appendValue = appendValue.replaceAll(Pattern.quote("{{ hostname }}"), hostname);
+
                 log(INFO, "A [" + appendValue + "]");
 
                 contents = contents + System.getProperty("line.separator");
@@ -88,6 +93,8 @@ public class ValueReplacer {
                 if (null == contents) {
                     throw new RuntimeException("file has not been loaded!");
                 }
+
+                newValue = newValue.replaceAll(Pattern.quote("{{ hostname }}"), hostname);
 
                 log(INFO, "O [" + oldValue + "]");
                 log(INFO, "N [" + newValue + "]");
@@ -104,14 +111,12 @@ public class ValueReplacer {
     }
 
     private static String load(File file) throws IOException  {
-        log(INFO,"Loading file [" + file.getAbsolutePath() + "]");
+        log(INFO,"L [" + file.getAbsolutePath() + "]");
         return new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
     }
 
     private static void save(File file, String contents, String hostname) throws IOException {
-        contents = contents.replaceAll(Pattern.quote("{{ hostname }}"), hostname);
-
-        log(INFO,"Saving file [" + file.getAbsolutePath() + "]");
+        log(INFO,"S [" + file.getAbsolutePath() + "]");
         BufferedWriter bufferedWriter = null;
 
         try {
